@@ -1,5 +1,7 @@
 # CSVparser
-    Java Application for parsing a CSV file and adding the processed data into a SQLite Databse. Uses MAVEN repos. It is done by me without the help of other open source libraries like ApacheCSV or OpenCSV.
+    Java Application for parsing a CSV file and adding the processed data into a SQLite Databse.
+    Uses MAVEN repos. It is done by me WITHOUT the help of other open source libraries
+    like ApacheCSV or OpenCSV.
 
 CSVparser
     CSVparser program intends to be a Java parser for the CSV file format. The valid processed data  is then written into a SQLite database. The invalid data is written to another CSV file, which has the timestamp in the title of the file. It is done using MAVEN tools.
