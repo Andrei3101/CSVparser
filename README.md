@@ -21,7 +21,7 @@
     (often proprietary and/or undocumented) formats. This works because so many programs support some 
     variation of CSV at least as an alternative import/export format.
 
-<h3>Compilation</3>
+<h3>Compilation</h3>
 
     The main method is located in: /src/main/java/ClientReader.java which has detailed explanation for 
     every step of the program. The initial CSV (rawData.csv) file IS LOCATED in this folder of the maven project:
