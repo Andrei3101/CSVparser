@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 class DbConnection {
 
-    // Get the connection to the SQLite DB 2
+    // Get the connection to the SQLite DB
     static Connection getConnection() throws ClassNotFoundException, SQLException {
 
         Class.forName(ClientReader.prop.getProperty("DRIVER"));
