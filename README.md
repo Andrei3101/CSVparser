@@ -34,7 +34,7 @@
     results of the execution. A new SQLite database is generated with the default name of  "myDB.sqlite". 
 
 <h3>Future releases</h3>
-    In future releases, the main objective will be to increase performance. 
+    In future releases, the main objective will be to increase performance and insert additional functionalities. 
     Open source libraries like Apache CSV or OpenCSV might also be used.
 
 Thank you for support.
