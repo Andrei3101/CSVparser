@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Maven template
+.idea/
+test/
+target/
+*.csv
+*.log
+*.iml
+*.sqlite
