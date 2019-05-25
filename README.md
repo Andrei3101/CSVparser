@@ -25,7 +25,8 @@
 
     The main method is located in: /src/main/java/ClientReader.java which has detailed explanation for 
     every step of the program. The initial CSV (rawData.csv) file IS LOCATED in this folder of the maven project:
-    src/main/resources/rawData.csv
+    src/main/resources/rawData.csv 
+    The DDL for creating the "clients" table is located in the createTable method of the ClientDB.java file.
 
 <h3> Execution </h3>
 
