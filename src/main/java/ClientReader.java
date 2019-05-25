@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,12 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 public class ClientReader {
 
-    // Define DB and Table names for writing to SQLite DB
-    static final String DB_NAME = "myDB.sqlite";
-    static final String TABLE_NAME = "clients";
+    // Declaring properties file containing app Strings
+    static Properties prop;
 
     // Define variables for the overall results
     static int nrReceived = 0;
@@ -24,29 +22,44 @@ public class ClientReader {
 
     private static FileWriter csvWriter;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
+    public static void main(String[] args) {
 
-        // Create Database and Table for adding clients
-        ClientDB.getConnection();
-        ClientDB.createTable();
+        try {
+            // Loading data from properties file
+            InputStream in = new FileInputStream("app.properties");
+            prop = new Properties();
+            prop.load(in);
 
-        // Create csv file for writing bad data records with timestamp
-        csvWriter = CreateCSV.createFile();
+            // Create Database and Table for adding clients
+            DbConnection.getConnection();
+            ClientDB.createTable();
 
-        // Process data written in the given CSV file
-        processCSV();
+            // Create csv file for writing bad data records with timestamp
+            csvWriter = CreateCSV.createFile();
 
-        // close the csv FileWriter
-        csvWriter.close();
+            // Process data written in the given CSV file
+            processCSV();
 
-        // write the results into the LOG file
-        CreateLog.getLog();
+            // close the csv FileWriter
+            csvWriter.close();
+
+            // ClientDB.selectAll();
+
+            // write the results into the LOG file
+            CreateLog.getLog();
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error connecting to the Database. Check DB or Table DDL.");
+        } catch (SQLException | IOException ex) {
+            System.out.println("Error in processing SQL or input files:" + ex.getMessage());
+            ex.printStackTrace();
+        }
 
     }
 
-    private static void processCSV() throws IOException, ClassNotFoundException, SQLException {
+    private static void processCSV() throws IOException, SQLException, ClassNotFoundException {
 
-        Path pathToFile = Paths.get("src/main/resources/rawData.csv");
+        Path pathToFile = Paths.get(prop.getProperty("PATH_TO_CSV"));
 
         // create an instance of BufferedReader using try with resource, Java 7 feature to close resources
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
@@ -59,10 +72,10 @@ public class ClientReader {
             line = br.readLine();
 
             // Connecting to DB and setting auto commit to false, in order to improve overall DB
-            Connection connect = ClientDB.getConnection();
+            Connection connect = DbConnection.getConnection();
             connect.setAutoCommit(false);
 
-            // Setting a prepared statement for inserting data into DB
+            // Setting a prepared statement for inserting data into SQLite DB
             String sql_Insert = "INSERT INTO clients(A, B, C, D, E, F, G, H, I, J ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = connect.prepareStatement(sql_Insert);
 
@@ -70,13 +83,13 @@ public class ClientReader {
             while (line != null) {
 
                 //process each row in the CSV file and getting the valid records
-                List<String> goodRecords = processLine(line);
+                List<String> goodRecord = processLine(line);
 
-                if (goodRecords != null) {
+                if (goodRecord != null) {
 
                     // setting values for the PreparedStatement
                     for (int i = 0; i < 10; i++) {
-                        ps.setString(i + 1, goodRecords.get(i));
+                        ps.setString(i + 1, goodRecord.get(i));
                     }
 
                     // Using batch increases performance

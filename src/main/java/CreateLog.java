@@ -3,7 +3,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CreateLog {
+class CreateLog {
 
     static void getLog() throws IOException {
 
@@ -11,7 +11,7 @@ public class CreateLog {
 
         // Create an instance of FileHandler that writes log to a file called
         // clientData.log. Each new message will be appended at the end of the log file.
-        FileHandler fileHandler = new FileHandler("clientData.log", true);
+        FileHandler fileHandler = new FileHandler(ClientReader.prop.getProperty("LOG_FILE"), true);
         logger.addHandler(fileHandler);
 
         if (logger.isLoggable(Level.INFO)) {
